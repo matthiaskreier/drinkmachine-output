@@ -1,3 +1,67 @@
+input.onButtonPressed(Button.A, function () {
+    serial.writeLine("I start to make mr wolf sized water chilled to 6 degree celsius")
+    function makeWaterCup(volume: number) {
+        serial.writeLine("Starting to fill my container")
+        serial.writeLine((myDrinkMachine.getVolume().toString()))
+        myDrinkMachine.startFillingContainer()
+        while (myDrinkMachine.getVolume() < volume) {
+            myDrinkMachine.wait(1)
+        }
+        serial.writeLine("Finished Filling the Container")
+        myDrinkMachine.stopFillingContainer()
+        serial.writeLine("Cooling the Water")
+        myDrinkMachine.turnCoolerOn()
+        while (myDrinkMachine.getTemperature() > 6) {
+            myDrinkMachine.wait(1)
+
+        }
+        serial.writeLine("Finished cooling water")
+        myDrinkMachine.turnCoolerOff()
+        serial.writeLine(myDrinkMachine.getTemperature().toString())
+        let filledCup2 = fillCup()
+        serial.writeLine(filledCup2.descriptionString)
+    }
+makeWaterCup(500)
+})
+input.onButtonPressed(Button.B, function () {
+    serial.writeLine("I start to make mr wolf sized soda")
+    function makeSodaCup(volume: number) {
+        serial.writeLine("Starting to fill my container")
+        serial.writeLine(myDrinkMachine.getVolume().toString())
+        myDrinkMachine.startFillingContainer()
+        while (myDrinkMachine.getVolume() < volume) {
+            myDrinkMachine.wait(1)
+        }
+        serial.writeLine("Finished Filling the Container")
+        myDrinkMachine.stopFillingContainer()
+        serial.writeLine("Adding soda to the drink")
+        while (myDrinkMachine.sodaMixInMixingContainer < 54) {
+            myDrinkMachine.addSodaMix()
+        }
+        serial.writeLine("Finished adding the soda")
+        serial.writeLine("Turning cooler")
+        myDrinkMachine.turnCoolerOn()
+
+        while (myDrinkMachine.getTemperature() > 9) {
+            myDrinkMachine.wait(1)
+
+        }
+        serial.writeLine("Drink Cooled")
+        myDrinkMachine.turnCoolerOff()
+        serial.writeLine(myDrinkMachine.getTemperature().toString())
+        serial.writeLine("Carbonated the Drink")
+        myDrinkMachine.carbonateMixingContainer()
+        let filledCup3 = fillCup()
+        serial.writeLine(filledCup3.descriptionString)
+        let concentration = filledCup3.sodaMix / filledCup3.volume
+        serial.writeLine(concentration.toString())
+    }
+makeSodaCup(500)
+})
+function fillCup () {
+    let filledCup = myDrinkMachine.dispenseDrinkFromMixingContainer()
+return filledCup
+}
 class Cup {
 
     volume: number
@@ -16,7 +80,6 @@ class Cup {
     }
 
 }
-
 class DrinkMachine {
 
     reservoirVolume: number
@@ -187,8 +250,8 @@ class DrinkMachine {
             this.mixingContainerTemperature += deltaTemperature
         }
         if (this.mixingCoolerOn) {
-            let deltaTemperature = this.COOLER_POWER / (this.mixingContainerVolume * 100)
-            this.mixingContainerTemperature += deltaTemperature
+            let deltaTemperature2 = this.COOLER_POWER / (this.mixingContainerVolume * 100)
+            this.mixingContainerTemperature += deltaTemperature2
         }
 
     }
@@ -197,85 +260,5 @@ class DrinkMachine {
 
 
 }
-
 let myDrinkMachine = new DrinkMachine()
-
-function fillCup() {
-
-
-    let filledCup = myDrinkMachine.dispenseDrinkFromMixingContainer()
-
-    return filledCup
-
-}
-
-
-input.onButtonPressed(Button.A, function () {
-    serial.writeLine("I start to make mr wolf sized water chilled to 6 degree celsius")
-    function makeWaterCup(volume: number) {
-        serial.writeLine("Starting to fill my container")
-        serial.writeLine((myDrinkMachine.getVolume().toString()))
-        myDrinkMachine.startFillingContainer()
-        while (myDrinkMachine.getVolume() < volume) {
-            myDrinkMachine.wait(1)
-        }
-        serial.writeLine("Finished Filling the Container")
-        myDrinkMachine.stopFillingContainer()
-        serial.writeLine("Cooling the Water")
-        myDrinkMachine.turnCoolerOn()
-        while (myDrinkMachine.getTemperature() > 6) {
-            myDrinkMachine.wait(1)
-
-        }
-        serial.writeLine("Finished cooling water")
-        myDrinkMachine.turnCoolerOff()
-        serial.writeLine(myDrinkMachine.getTemperature().toString())
-        let filledCup = fillCup()
-        serial.writeLine(filledCup.descriptionString)
-    }
-    makeWaterCup(500)
-}
-)
-
-input.onButtonPressed(Button.B, function () {
-    serial.writeLine("I start to make mr wolf sized soda")
-    function makeSodaCup(volume: number) {
-        serial.writeLine("Starting to fill my container")
-        serial.writeLine(myDrinkMachine.getVolume().toString())
-        myDrinkMachine.startFillingContainer()
-        while (myDrinkMachine.getVolume() < volume) {
-            myDrinkMachine.wait(1)
-        }
-        serial.writeLine("Finished Filling the Container")
-        myDrinkMachine.stopFillingContainer()
-        serial.writeLine("Adding soda to the drink")
-        while (myDrinkMachine.sodaMixInMixingContainer < 54) {
-            myDrinkMachine.addSodaMix()
-        }
-        serial.writeLine("Finished adding the soda")
-        serial.writeLine("Turning cooler")
-        myDrinkMachine.turnCoolerOn()
-
-        while (myDrinkMachine.getTemperature() > 9) {
-            myDrinkMachine.wait(1)
-
-        }
-        serial.writeLine("Drink Cooled")
-        myDrinkMachine.turnCoolerOff()
-        serial.writeLine(myDrinkMachine.getTemperature().toString())
-        serial.writeLine("Carbonated the Drink")
-        myDrinkMachine.carbonateMixingContainer()
-        let filledCup = fillCup()
-        serial.writeLine(filledCup.descriptionString)
-        let concentration = filledCup.sodaMix / filledCup.volume
-        serial.writeLine(concentration.toString())
-    }
-    makeSodaCup(500)
-}
-)
-
 serial.writeLine("Press A for a Mr. Wolf sized cup of soda and B for a Mr. Wolf sized cup of water chilled to 6 ˚C")
-
-
-
-
